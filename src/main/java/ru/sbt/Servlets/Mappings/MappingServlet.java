@@ -34,6 +34,12 @@ public class MappingServlet extends HttpServlet {
             case ("/login"):
                 getServletContext().getRequestDispatcher("/login.jsp").forward(req, resp);
                 break;
+            case ("/logout"):
+                req.getSession().setAttribute("isAuthorized", "false");
+                logger.info("User @"+req.getSession().getAttribute("username")+" was logout");
+                req.getSession().setAttribute("username", "");
+                resp.sendRedirect("/login");
+                break;
             case ("/register"):
                 getServletContext().getRequestDispatcher("/reg.jsp").forward(req, resp);
                 break;
@@ -68,6 +74,8 @@ public class MappingServlet extends HttpServlet {
                     session.setAttribute("username", req.getParameter("username"));
                     logger.info("User @"+req.getParameter("username")+" was authorized");
                     resp.sendRedirect("/messenger");
+                } else {
+                    resp.sendRedirect("/login");
                 }
                 break;
             case ("/register"):

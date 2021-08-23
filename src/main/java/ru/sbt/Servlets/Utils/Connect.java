@@ -62,9 +62,9 @@ public class Connect {
                 "'username' text PRIMARY KEY," +
                 "'password' text);");
         statement.execute("CREATE TABLE IF NOT EXISTS 'chat'(" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "'user_id' INTEGER, " +
                 "'message' text);");
-
+//        statement.execute("INSERT INTO 'users' VALUES('no8ter', '12345');");
+//        statement.execute("INSERT INTO 'chat' VALUES(1, 'Hello, World!');");
     }
 }

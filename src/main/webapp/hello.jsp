@@ -1,9 +1,6 @@
-<html lang="Ru">
-    <head>
-        <meta charset="UTF-8">
-        <title>Index Page</title>
-    </head>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="top.jsp" />
     <body>
-        <p>Messenger</p>
+        <a href="/messenger"><p>Messenger</p></a>
     </body>
 </html>

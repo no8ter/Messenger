@@ -1,28 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Messenger</title>
-    <style>
-        html, body {
-            margin-top: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-        div.main{
-            margin-left: 10%;
-            margin-right: 10%;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-    </style>
-</head>
+<%@ page import="ru.sbt.Servlets.Utils.UserTools" %>
+<%@ page import="java.util.List" %>
+<jsp:include page="top.jsp" />
 <body>
 
     <div class="main">
-
+        <%
+            for(List<String> l : UserTools.getChatStory()){
+                String message = "<div class=\"message\">"+
+                                    "<p>"+l.get(0)+": "+l.get(1)+"</p>"+
+                                 "</div>";
+                out.println(message);
+            }
+        %>
     </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package ru.sbt.Servlets;
+package ru.sbt.Servlets.Filters;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -6,17 +6,18 @@ import java.io.IOException;
 public class Utf8Filter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=utf-8");
-        System.out.println("#encoded#");
         chain.doFilter(request, response);
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 }

@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>MappingServlet</servlet-name>
-        <servlet-class>ru.sbt.Servlets.MappingServlet</servlet-class>
+        <servlet-class>ru.sbt.Servlets.Mappings.MappingServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -16,11 +16,22 @@
 
     <filter>
         <filter-name>Utf8Filter</filter-name>
-        <filter-class>ru.sbt.Servlets.Utf8Filter</filter-class>
+        <filter-class>ru.sbt.Servlets.Filters.Utf8Filter</filter-class>
     </filter>
 
     <filter-mapping>
         <filter-name>Utf8Filter</filter-name>
+        <servlet-name>*</servlet-name>
+    </filter-mapping>
+
+<!-- Filters -->
+    <filter>
+        <filter-name>AuthorizedFilter</filter-name>
+        <filter-class>ru.sbt.Servlets.Filters.AuthorizedFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthorizedFilter</filter-name>
         <servlet-name>*</servlet-name>
     </filter-mapping>
 </web-app>

@@ -24,11 +24,19 @@
             %>
             <div class="send_message_form">
                 <form method="post" id="send_message">
-                    <input type="text" name="message" placeholder="Сообщение">
+                    <input type="text" name="message" placeholder="Сообщение" id="message_field">
                     <input type="submit" value="Отправить">
                 </form>
             </div>
         </div>
+
+    <script type="text/javascript">
+
+    setTimeout(function(){
+       if (document.getElementById("message_field").value == "") window.location.reload(1);
+    }, 5000);
+
+    </script>
 
 </body>
 </html>

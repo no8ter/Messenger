@@ -1,18 +1,34 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="ru.sbt.Servlets.Utils.UserTools" %>
 <%@ page import="java.util.List" %>
+<%@ page session="true" %>
 <jsp:include page="top.jsp" />
 <body>
 
-    <div class="main">
-        <%
-            for(List<String> l : UserTools.getChatStory()){
-                String message = "<div class=\"message\">"+
-                                    "<p>"+l.get(0)+": "+l.get(1)+"</p>"+
-                                 "</div>";
-                out.println(message);
-            }
-        %>
-    </div>
+        <div class="menu">
+            <h3>@<%= request.getSession().getAttribute("username") %></h3>
+            <a href="/logout"><button>Выйти</button></a>
+        </div>
+        <div class="messenger">
+            <%
+                for(List<String> l : UserTools.getChatStory()){
+                    String message = "<div class=\"message\"><p>";
+                    if (request.getSession().getAttribute("username").equals(l.get(0))) {
+                        message+="<font color=\"lightgreen\">"+l.get(0)+"</font>";
+                    } else {
+                        message+=l.get(0);
+                    }
+                    message += ": "+l.get(1)+"</p></div>";
+                    out.println(message);
+                }
+            %>
+            <div class="send_message_form">
+                <form method="post" id="send_message">
+                    <input type="text" name="message" placeholder="Сообщение">
+                    <input type="submit" value="Отправить">
+                </form>
+            </div>
+        </div>
+
 </body>
 </html>

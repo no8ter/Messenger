@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import static ru.sbt.Servlets.Utils.Connect.exec;
-import static ru.sbt.Servlets.Utils.Connect.warmup;
+import static java.util.Arrays.asList;
+import static ru.sbt.Servlets.Utils.Connect.*;
 import static ru.sbt.Servlets.Utils.UserTools.checkLoginAndPass;
 
 public class MappingServlet extends HttpServlet {
@@ -36,7 +38,7 @@ public class MappingServlet extends HttpServlet {
                 break;
             case ("/logout"):
                 req.getSession().setAttribute("isAuthorized", "false");
-                logger.info("User @"+req.getSession().getAttribute("username")+" was logout");
+                logger.info("User @" + req.getSession().getAttribute("username") + " was logout");
                 req.getSession().setAttribute("username", "");
                 resp.sendRedirect("/login");
                 break;
@@ -51,10 +53,6 @@ public class MappingServlet extends HttpServlet {
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
-
-        if (req.getSession().isNew()) {
-            logger.info("Got new session");
         }
 
         logger.info("Got GET request: " + path);
@@ -72,18 +70,39 @@ public class MappingServlet extends HttpServlet {
                 if (checkLoginAndPass(req.getParameter("username"), req.getParameter("password"))) {
                     session.setAttribute("isAuthorized", "true");
                     session.setAttribute("username", req.getParameter("username"));
-                    logger.info("User @"+req.getParameter("username")+" was authorized");
+                    logger.info("User @" + req.getParameter("username") + " was authorized");
                     resp.sendRedirect("/messenger");
                 } else {
                     resp.sendRedirect("/login");
                 }
                 break;
             case ("/register"):
-                exec("INSERT INTO 'users'('username', 'password') VALUES ('"+
-                        req.getParameter("username")+"','"+
-                        req.getParameter("password")+"');");
-                logger.info("New user @"+req.getParameter("username")+" was registered");
+                exec("INSERT INTO 'users'('username', 'password') VALUES ('" +
+                        req.getParameter("username") + "','" +
+                        req.getParameter("password") + "');");
+                logger.info("New user @" + req.getParameter("username") + " was registered");
                 resp.sendRedirect("/login");
+                break;
+            case ("/messenger"):
+                String sender = (String) req.getSession().getAttribute("username");
+                String message = req.getParameter("message");
+                int senderId = 0;
+
+                String sql = "SELECT rowid FROM 'users' WHERE 'users'.'username' = '" + sender + "';";
+                ResultSet results = exeq(sql);
+
+                try {
+                    assert results != null;
+                    if (results.next()) {
+                        senderId = results.getInt("rowid");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                exec("INSERT INTO 'chat' VALUES (" + senderId + ",'" + message + "');");
+                logger.info("User @" + sender + " send a message");
+                resp.sendRedirect("/messenger");
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);

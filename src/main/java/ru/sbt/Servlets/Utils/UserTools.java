@@ -29,14 +29,12 @@ public class UserTools {
         }
     }
 
-    public static List<List<String>> getChatStory(){
+    public static List<List<String>> getChatStory() {
         List<List<String>> ret = new ArrayList<>();
 
         try {
             String sql = "SELECT username, message FROM 'chat' join 'users' on 'chat'.'user_id'='users'.'rowid' LIMIT 100;";
             ResultSet results = exeq(sql);
-
-
             assert results != null;
             while (results.next()) {
                 ret.add(asList(results.getString("username"), results.getString("message")));

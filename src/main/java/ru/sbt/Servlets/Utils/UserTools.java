@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static ru.sbt.Servlets.Utils.Connect.exec;
 import static ru.sbt.Servlets.Utils.Connect.exeq;
 
 public class UserTools {
@@ -45,5 +46,26 @@ public class UserTools {
         }
 
         return ret;
+    }
+
+    public static void registerNewUser(String username, String password) {
+        exec("INSERT INTO 'users'('username', 'password') VALUES ('" + username + "','" + password + "');");
+    }
+
+    public static void sendUserMessage(String username, String message) {
+        int senderId = 0;
+        String sql = "SELECT rowid FROM 'users' WHERE 'users'.'username' = '" + username + "';";
+        ResultSet results = exeq(sql);
+
+        try {
+            assert results != null;
+            if (results.next()) {
+                senderId = results.getInt("rowid");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        exec("INSERT INTO 'chat'('user_id', 'message') VALUES (" + senderId + ",'" + message + "');");
     }
 }

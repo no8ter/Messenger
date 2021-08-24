@@ -64,7 +64,5 @@ public class Connect {
         statement.execute("CREATE TABLE IF NOT EXISTS 'chat'(" +
                 "'user_id' INTEGER, " +
                 "'message' text);");
-//        statement.execute("INSERT INTO 'users' VALUES('no8ter', '12345');");
-//        statement.execute("INSERT INTO 'chat' VALUES(1, 'Hello, World!');");
     }
 }

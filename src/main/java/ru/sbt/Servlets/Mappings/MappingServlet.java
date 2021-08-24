@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 import static java.util.Arrays.asList;
 import static ru.sbt.Servlets.Utils.Connect.*;
-import static ru.sbt.Servlets.Utils.UserTools.checkLoginAndPass;
+import static ru.sbt.Servlets.Utils.UserTools.*;
 
 public class MappingServlet extends HttpServlet {
 
@@ -77,30 +77,16 @@ public class MappingServlet extends HttpServlet {
                 }
                 break;
             case ("/register"):
-                exec("INSERT INTO 'users'('username', 'password') VALUES ('" +
-                        req.getParameter("username") + "','" +
-                        req.getParameter("password") + "');");
+                registerNewUser(req.getParameter("username"), req.getParameter("password"));
                 logger.info("New user @" + req.getParameter("username") + " was registered");
                 resp.sendRedirect("/login");
                 break;
             case ("/messenger"):
                 String sender = (String) req.getSession().getAttribute("username");
                 String message = req.getParameter("message");
-                int senderId = 0;
 
-                String sql = "SELECT rowid FROM 'users' WHERE 'users'.'username' = '" + sender + "';";
-                ResultSet results = exeq(sql);
+                sendUserMessage(sender, message);
 
-                try {
-                    assert results != null;
-                    if (results.next()) {
-                        senderId = results.getInt("rowid");
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-                exec("INSERT INTO 'chat' VALUES (" + senderId + ",'" + message + "');");
                 logger.info("User @" + sender + " send a message");
                 resp.sendRedirect("/messenger");
                 break;
